@@ -210,16 +210,39 @@ void ofxTLTrigger::nudgeBy(ofVec2f nudgePercent){
 	}
 }
 
+void ofxTLTrigger::update(){
+	ofEventArgs tmpArgs; // we can only do this because the args are never used below
+	update(tmpArgs);
+}
+
 void ofxTLTrigger::update(ofEventArgs& args){
+	
 	float thisTimelinePoint = timeline->getPercentComplete();
+	
 	for(int i = 0; i < triggers.size(); i++){
-		if(lastTimelinePoint < triggers[i].pt && thisTimelinePoint > triggers[i].pt){
+		//cout << i << " thisTimelinePoint: " << thisTimelinePoint << " triggers[i].pt: " << triggers[i].pt << " lastTimelinePoint: " << lastTimelinePoint << endl;   	
+		bool tmpSendEvent = false;
+		
+		// are we moving forwards or backwards?
+		if( lastTimelinePoint > thisTimelinePoint ){
+			if( lastTimelinePoint > triggers[i].pt && thisTimelinePoint < triggers[i].pt ){
+				tmpSendEvent = true;
+			}
+		} else {		
+			if(lastTimelinePoint < triggers[i].pt && thisTimelinePoint > triggers[i].pt){
+				tmpSendEvent = true;
+			}
+		}
+		
+		if( tmpSendEvent ){
 			ofxTLTriggerEventArgs args;
 			args.triggerName = triggers[i].name;
 			args.triggerGroupName = name;
-			ofNotifyEvent(ofxTLEvents.trigger, args);
+			ofNotifyEvent(ofxTLEvents.trigger, args);					
 		}
+			
 	}
+	//cout << "--------------------------" << endl;
 	lastTimelinePoint = thisTimelinePoint;
 }
 
@@ -233,7 +256,7 @@ void ofxTLTrigger::playbackEnded(ofxTLPlaybackEventArgs& args){
 }
 
 void ofxTLTrigger::playbackLooped(ofxTLPlaybackEventArgs& args){
-	cout << "playback looped" << endl;
+	//cout << "playback looped" << endl;
 	lastTimelinePoint = 0;
 }
 

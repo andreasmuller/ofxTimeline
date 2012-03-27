@@ -140,6 +140,8 @@ class ofxTimeline {
 
 	virtual void draw();
 
+	virtual void forceUpdateAllPages();
+	
 	virtual void addPage(string name, bool makeCurrent = true);
 	virtual void setPageName(string newName);
 	virtual void setCurrentPage(string name);

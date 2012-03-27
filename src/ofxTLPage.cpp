@@ -82,6 +82,11 @@ void ofxTLPage::setTicker(ofxTLTicker* t){
 }
 
 void ofxTLPage::draw(){	
+	
+	ofSetColor(255,255,255,50);
+	ofRect( elementContainerRect );
+	
+	ofSetColor(255,255,255,255);	
 	for(int i = 0; i < headers.size(); i++){
 		headers[i]->draw();
 		elements[headers[i]->name]->draw();
@@ -99,6 +104,13 @@ void ofxTLPage::draw(){
 		elements[headers[i]->name]->drawModalContent();
 	}	
 	
+}
+
+void ofxTLPage::update()
+{
+	for(int i = 0; i < headers.size(); i++){
+		elements[headers[i]->name]->update();
+	}	
 }
 
 #pragma mark events

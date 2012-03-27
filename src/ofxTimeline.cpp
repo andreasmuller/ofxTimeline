@@ -213,6 +213,8 @@ void ofxTimeline::setCurrentFrame(int newFrame){
 	}
 //	cout << "setting frame to " << newFrame << endl;
 	currentFrame = newFrame;
+	
+	forceUpdateAllPages();	
 }
 
 void ofxTimeline::setPercentComplete(float percent){
@@ -222,6 +224,8 @@ void ofxTimeline::setPercentComplete(float percent){
 	else{
 		currentTime = percent*durationInSeconds;
 	}
+
+	forceUpdateAllPages();	
 }
 
 void ofxTimeline::setCurrentTime(float time){
@@ -229,6 +233,15 @@ void ofxTimeline::setCurrentTime(float time){
 		ofLogWarning("ofxTimeline -- setting current time on a framebased timeline has no effect.");
 	}
 	currentTime = time;
+	
+	forceUpdateAllPages();	
+}
+
+
+void ofxTimeline::forceUpdateAllPages(){
+	for(int i = 0; i < pages.size(); i++){
+		pages[i]->update();
+	}
 }
 
 bool ofxTimeline::getIsFrameBased(){

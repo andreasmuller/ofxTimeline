@@ -80,7 +80,8 @@ class ofxTLTrigger : public ofxTLElement
 	
 protected:
 	ofxTextInputField textfield;
-	
+
+	void update();
 	void update(ofEventArgs& args);
 	void sortTriggers();
 						   

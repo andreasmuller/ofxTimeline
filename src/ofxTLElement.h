@@ -50,6 +50,8 @@ class ofxTLElement
 	virtual void setup() = 0;
 	virtual void draw() = 0;
 	virtual void drawModalContent(){}; //for pop up window-ish stuff
+
+	virtual void update(){}; // to force an update when we are not in play mode	
 	
 	virtual void enable();
 	virtual void disable();

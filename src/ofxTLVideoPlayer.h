@@ -39,6 +39,8 @@ class ofxTLVideoPlayer : public ofxTLElement {
 	void setVideoPlayer(ofVideoPlayer& player, string thumbDirectory);
 	ofVideoPlayer& getPlayer();
 	
+	void updateTimeline();
+	
 	int getSelectedFrame();
 	int getCurrentFrame();
 
@@ -48,7 +50,9 @@ class ofxTLVideoPlayer : public ofxTLElement {
 	
 	void setInFrame(int inFrame);
 	void setOutFrame(int outFrame);
-		
+	
+	void setAutoUpdateTimelineOnDraw( bool _auto ); // if we turns this feature off, we have to call updateTimeline() ourselves every frame
+	
   protected:
 	int selectedFrame;
 	int currentLoop;
@@ -57,6 +61,8 @@ class ofxTLVideoPlayer : public ofxTLElement {
 		
 	int inFrame;
 	int outFrame;
+	
+	bool autoUpdateTimelineOnDraw;
 	
 	void calculateFramePositions();
 	void generateVideoThumbnails();

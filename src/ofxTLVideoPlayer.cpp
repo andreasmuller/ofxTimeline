@@ -16,6 +16,7 @@ ofxTLVideoPlayer::ofxTLVideoPlayer() {
 	currentLoop = 0;
 	inFrame = -1;
 	outFrame = -1;
+	autoUpdateTimelineOnDraw = true;
 }
 
 ofxTLVideoPlayer::~ofxTLVideoPlayer(){
@@ -32,42 +33,11 @@ void ofxTLVideoPlayer::draw(){
 		return;
 	}
 	
-	if(player->isPlaying() && player->getSpeed() > 0.0){
-		
-//		cout << " is playing player frame " << player->getCurrentFrame() << " current frame " << getCurrentFrame() << endl;
-		if(timeline->getIsFrameBased()){
-
-			if(player->getCurrentFrame() < inFrame || player->getCurrentFrame() > outFrame){
-//				cout << "reset in frame from " << player->getCurrentFrame() << endl;
-				player->setFrame(inFrame);
-//				cout << "	to: " << player->getCurrentFrame() << endl;
-			}
-			
-			if(lastFrame > player->getCurrentFrame()){
-				currentLoop++;
-//				cout << "LOOPED! with last frame " << lastFrame << " " << player->getCurrentFrame() << " current loop " << currentLoop << endl;
-			}
-			
-			if(timeline->getOutFrame() < getCurrentFrame() || timeline->getInFrame() > getCurrentFrame() ){				
-				if(timeline->getInFrame() > player->getCurrentFrame() && timeline->getLoopType() == OF_LOOP_NONE){
-					player->stop();
-				}
-				else {
-					//player->setFrame( timeline->getInFrame() % player->getTotalNumFrames());
-					selectFrame(timeline->getInFrame());
-				}
-			}
-						
-			timeline->setCurrentFrame(getCurrentFrame());
-			lastFrame = player->getCurrentFrame();
-		}
-		else{
-			if(timeline->getOutTime() < player->getPosition()*player->getDuration() || timeline->getInTime() > player->getPosition()*player->getDuration() ){
-				player->setFrame(timeline->getInOutRange().min * player->getTotalNumFrames());
-			}
-			timeline->setCurrentTime( player->getPosition() * player->getDuration());
-		}
+	if( autoUpdateTimelineOnDraw )
+	{
+		updateTimeline();
 	}
+
 	
 //	cout << "in out is " << inFrame << " " << outFrame << endl;
 	
@@ -117,6 +87,45 @@ void ofxTLVideoPlayer::draw(){
 	ofPopStyle();
 }
 
+void ofxTLVideoPlayer::updateTimeline(){
+	if(player->isPlaying() && player->getSpeed() > 0.0){
+		
+		//		cout << " is playing player frame " << player->getCurrentFrame() << " current frame " << getCurrentFrame() << endl;
+		if(timeline->getIsFrameBased()){
+			
+			if(player->getCurrentFrame() < inFrame || player->getCurrentFrame() > outFrame){
+				//				cout << "reset in frame from " << player->getCurrentFrame() << endl;
+				player->setFrame(inFrame);
+				//				cout << "	to: " << player->getCurrentFrame() << endl;
+			}
+			
+			if(lastFrame > player->getCurrentFrame()){
+				currentLoop++;
+				//				cout << "LOOPED! with last frame " << lastFrame << " " << player->getCurrentFrame() << " current loop " << currentLoop << endl;
+			}
+			
+			if(timeline->getOutFrame() < getCurrentFrame() || timeline->getInFrame() > getCurrentFrame() ){				
+				if(timeline->getInFrame() > player->getCurrentFrame() && timeline->getLoopType() == OF_LOOP_NONE){
+					player->stop();
+				}
+				else {
+					//player->setFrame( timeline->getInFrame() % player->getTotalNumFrames());
+					selectFrame(timeline->getInFrame());
+				}
+			}
+			
+			timeline->setCurrentFrame(getCurrentFrame());
+			lastFrame = player->getCurrentFrame();
+		}
+		else{
+			if(timeline->getOutTime() < player->getPosition()*player->getDuration() || timeline->getInTime() > player->getPosition()*player->getDuration() ){
+				player->setFrame(timeline->getInOutRange().min * player->getTotalNumFrames());
+			}
+			timeline->setCurrentTime( player->getPosition() * player->getDuration());
+		}
+	}
+}
+
 ofVideoPlayer & ofxTLVideoPlayer::getPlayer(){
 	return *player;
 }
@@ -152,8 +161,16 @@ void ofxTLVideoPlayer::setVideoPlayer(ofVideoPlayer& newPlayer, string thumbDir)
 		videoThumbs.push_back(t);
 	}
 	
+	if( videoThumbs.size() == 0 )
+	{
+		ofxTLVideoThumb t;
+		t.setup(0, thumbDir);
+		videoThumbs.push_back(t);
+	}
+	
 	videoThumbs[0].visible = true;
 	generateThumbnailForFrame(0);
+	
 	calculateFramePositions();
 	generateVideoThumbnails();
 }
@@ -291,6 +308,10 @@ float ofxTLVideoPlayer::getCurrentTime(){
 
 int ofxTLVideoPlayer::getSelectedFrame(){
 	return selectedFrame + currentLoop * (outFrame-inFrame);
+}
+
+void ofxTLVideoPlayer::setAutoUpdateTimelineOnDraw( bool _auto ) {
+	autoUpdateTimelineOnDraw = _auto;
 }
 
 void ofxTLVideoPlayer::purgeOldThumbnails(){

@@ -49,6 +49,8 @@ class ofxTLPage {
 	virtual void setup();
 	virtual void draw();
 
+	virtual void update();	// To force updates
+	
 	virtual void setName(string name);
 	virtual string getName();
 	virtual void setAutosave(bool doAutosave);
