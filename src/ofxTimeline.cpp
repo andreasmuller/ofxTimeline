@@ -486,6 +486,9 @@ void ofxTimeline::disableEvents() {
 }
 
 void ofxTimeline::mousePressed(ofMouseEventArgs& args){
+	
+	if( !isShowing ) return; // bail if we are hidden
+	
 	dragAnchorSet = false;
 	ticker->mousePressed(args);
 	currentPage->mousePressed(args);
@@ -495,18 +498,27 @@ void ofxTimeline::mousePressed(ofMouseEventArgs& args){
 }
 
 void ofxTimeline::mouseMoved(ofMouseEventArgs& args){
+	
+	if( !isShowing ) return; // bail if we are hidden
+	
 	ticker->mouseMoved(args);
 	currentPage->mouseMoved(args);
 	zoomer->mouseMoved(args);
 }
 
 void ofxTimeline::mouseDragged(ofMouseEventArgs& args){
+	
+	if( !isShowing ) return; // bail if we are hidden
+	
 	ticker->mouseDragged(args);
 	currentPage->mouseDragged(args);
 	zoomer->mouseDragged(args);
 }
 
 void ofxTimeline::mouseReleased(ofMouseEventArgs& args){
+
+	if( !isShowing ) return; // bail if we are hidden	
+	
 	ticker->mouseReleased(args);
 	tabs->mouseReleased(args);
 	currentPage->mouseReleased(args);
@@ -514,6 +526,9 @@ void ofxTimeline::mouseReleased(ofMouseEventArgs& args){
 }
 
 void ofxTimeline::keyPressed(ofKeyEventArgs& args){
+	
+	if( !isShowing ) return; // bail if we are hidden	
+	
 //	cout << "key event " << args.key << " ctrl? " << ofGetModifierKeyControl() << endl;
 	if(ofGetModifierKeyControl() && args.key == 3){ //copy
 		string copyattempt = currentPage->copyRequest();
