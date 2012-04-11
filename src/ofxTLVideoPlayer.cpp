@@ -126,7 +126,7 @@ void ofxTLVideoPlayer::updateTimeline(){
 	}
 }
 
-ofVideoPlayer & ofxTLVideoPlayer::getPlayer(){
+ofBaseVideoPlayer & ofxTLVideoPlayer::getPlayer(){
 	return *player;
 }
 
@@ -138,7 +138,7 @@ void ofxTLVideoPlayer::setOutFrame(int out){
 	outFrame = out;
 }
 
-void ofxTLVideoPlayer::setVideoPlayer(ofVideoPlayer& newPlayer, string thumbDir){
+void ofxTLVideoPlayer::setVideoPlayer(ofBaseVideoPlayer& newPlayer, string thumbDir){
 	ofDirectory checkCreateDirectory(thumbDir);
 	if (!checkCreateDirectory.exists()) {
 		ofLogError("ofxTLVideoPlayer -- Directory " + thumbDir + " doesn't exist! Creating");
@@ -146,7 +146,7 @@ void ofxTLVideoPlayer::setVideoPlayer(ofVideoPlayer& newPlayer, string thumbDir)
 	}
 	
 	if(inFrame == -1){
-		cout << "reseting in out" << endl;
+		//cout << "reseting in out" << endl;
 		inFrame = 0;
 		outFrame = newPlayer.getTotalNumFrames();
 	}

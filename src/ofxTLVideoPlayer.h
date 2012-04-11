@@ -36,8 +36,8 @@ class ofxTLVideoPlayer : public ofxTLElement {
 
 	virtual void drawRectChanged();
 
-	void setVideoPlayer(ofVideoPlayer& player, string thumbDirectory);
-	ofVideoPlayer& getPlayer();
+	void setVideoPlayer(ofBaseVideoPlayer& player, string thumbDirectory);
+	ofBaseVideoPlayer& getPlayer();
 	
 	void updateTimeline();
 	
@@ -70,7 +70,7 @@ class ofxTLVideoPlayer : public ofxTLElement {
 	//TODO: make this work
 	void purgeOldThumbnails();
 	
-	ofVideoPlayer* player;
+	ofBaseVideoPlayer* player;
 	
 	string thumbDirectory;	
 };
