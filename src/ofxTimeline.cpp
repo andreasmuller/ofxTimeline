@@ -62,7 +62,8 @@ ofxTimeline::ofxTimeline()
 	movePlayheadOnPaste(true),
 	movePlayheadOnDrag(true),
 	inoutRange(ofRange(0.0,1.0)),
-	currentPage(NULL)
+	currentPage(NULL),
+	maxWidth(-1.0f)
 {
 }
 
@@ -88,7 +89,13 @@ void ofxTimeline::setup(){
 	isSetup = true;
 	
 	width = ofGetWidth();
-
+	
+	// Sometimes we want the width to stay within a certain value, 
+	// like when we have a multiscreen canvas, needs to be set before calling setup
+	if( maxWidth > 0.0f ){
+		width = ofClamp( width, 0.0f, maxWidth );
+	}
+	
 	tabs = new ofxTLPageTabs();
 	tabs->setTimeline(this);
 	tabs->setup();
@@ -428,6 +435,11 @@ void ofxTimeline::setSnapping(bool snapping){
 	for(int i = 0; i < pages.size(); i++){
 		pages[i]->setSnapping(snappingEnabled);
 	}
+}
+
+void ofxTimeline::setMaxWidth( float _maxW )
+{
+	maxWidth = _maxW;
 }
 
 void ofxTimeline::unselectAll(){
