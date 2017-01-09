@@ -386,6 +386,8 @@ bool ofOpenALSoundPlayer_TimelineAdditions::load(string fileName, bool is_stream
        
     fileName = ofToDataPath(fileName);
 
+	cout << "ofOpenALSoundPlayer_TimelineAdditions::load " << fileName << endl;
+
 	bLoadedOk = false;
 	bMultiPlay = false;
 	isStreaming = is_stream;
@@ -511,7 +513,7 @@ void ofOpenALSoundPlayer_TimelineAdditions::threadedFunction(){
 	vector<vector<short> > multibuffer;
 	multibuffer.resize(channels);
 	while(isThreadRunning()){
-        cout << "threaded function" << endl;
+        //cout << "threaded function" << endl;
 		for(int i=0; i<int(sources.size())/channels; i++){
 			int processed;
 			alGetSourcei(sources[i*channels], AL_BUFFERS_PROCESSED, &processed);
@@ -1006,10 +1008,16 @@ vector<float>& ofOpenALSoundPlayer_TimelineAdditions::getAverages(){
         }
     }
     
-    
     return averages;
 }
 
+// ----------------------------------------------------------------------------
+vector<float>& ofOpenALSoundPlayer_TimelineAdditions::getBins()
+{
+	return bins;
+}
+
+// ----------------------------------------------------------------------------
 float ofOpenALSoundPlayer_TimelineAdditions::calculateAverage(float lowFreq, float hiFreq) {
     int lowBound = freqToIndex(lowFreq);
     int hiBound = freqToIndex(hiFreq);
@@ -1021,6 +1029,7 @@ float ofOpenALSoundPlayer_TimelineAdditions::calculateAverage(float lowFreq, flo
     return avg;
 }
 
+// ----------------------------------------------------------------------------
 int ofOpenALSoundPlayer_TimelineAdditions::freqToIndex(float freq) {
     if (freq < bandWidth / 2) return 0;
     if (freq > samplerate / 2 - window.size() / 2) return bins.size() - 1;

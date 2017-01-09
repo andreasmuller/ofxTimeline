@@ -113,9 +113,14 @@ class ofOpenALSoundPlayer_TimelineAdditions : public ofBaseSoundPlayer, public o
         vector<float>& getBufferForFrame(int _frame, float _fps, int _size);
         vector<float> currentBuffer;
 
+		vector<float>& getBins();
+
         float * getSystemSpectrum(int bands);
 
 		static ALCcontext * alContext;
+
+		vector<float> bins; // TEMP
+
 	protected:
 		
         void threadedFunction();
@@ -168,7 +173,6 @@ class ofOpenALSoundPlayer_TimelineAdditions : public ofBaseSoundPlayer, public o
 		vector<vector<float> > fftBuffers;
 		kiss_fftr_cfg fftCfg;
 		vector<float> windowedSignal;
-		vector<float> bins;
     	vector<float> averages;
         int currentMinBandwidth;
         int currentBandsPerOctave;

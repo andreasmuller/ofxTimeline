@@ -51,7 +51,8 @@ ofxTLAudioTrack::~ofxTLAudioTrack(){
 
 bool ofxTLAudioTrack::loadSoundfile(string filepath){
 	soundLoaded = false;
-	if(player.load(filepath, false)){
+	bool doStream = false;
+	if(player.load(filepath, doStream)){
     	soundLoaded = true;
 		soundFilePath = filepath;
 		shouldRecomputePreview = true;
@@ -113,7 +114,7 @@ void ofxTLAudioTrack::draw(){
 	}
 		
 	if(shouldRecomputePreview || viewIsDirty){
-//		cout << "recomputing waveform for audio file " << getSoundfilePath() << endl;
+		cout << "Recomputing waveform for audio file " << getSoundfilePath() << endl;
 		recomputePreview();
 	}
 

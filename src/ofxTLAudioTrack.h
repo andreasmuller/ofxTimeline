@@ -100,6 +100,8 @@ class ofxTLAudioTrack : public ofxTLTrack
     vector<float> &getCurrentBuffer(int _size = 512);
     vector<float> &getBufferForFrame(int _frame, int _size = 512);
 
+	ofOpenALSoundPlayer_TimelineAdditions* getPlayer() { return &player;  }
+
   protected:
 	
 	float positionForSecond(float second);
